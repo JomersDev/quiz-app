@@ -126,10 +126,21 @@ body {
   height: 60px;
 }
 
+.check {
+  width: 100%;
+  margin-top: 0.5em;
+}
+
 .btn-answer {
   border: 1px solid var(--outlined-ans);
   border-radius: 15px;
   background-color: var(--background-color);
+  width: 100%;
+}
+
+.btn-answer:hover {
+  background-color: var(--selected-ans);
+  cursor: pointer;
 }
 
 .selected {
@@ -145,6 +156,7 @@ body {
   color: var(--text-color);
   font-size: 1rem;
   font-weight: 700;
+  margin-bottom: 0.5em;
 }
 
 .correct {
@@ -160,5 +172,31 @@ body {
 .home-container {
   display: flex;
   flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+/**************************** Question Styling ******************************************/
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 2em 1.5em ;
+}
+
+.answer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  justify-content: space-between;
+}
+
+.results-tally {
+  color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5em;
   text-align: center;
 }

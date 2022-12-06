@@ -3,35 +3,45 @@ import './App.css'
 import Quiz from './Pages/Quiz'
 import { decode } from 'html-entities'
 import { nanoid } from 'nanoid'
+import { data } from './data'
 
 export default function App() {
 
   //State for setting quiz data received from API call
-  const [quizData, setQuizData] = useState([])
+  const [quizData, setQuizData] = useState(data.map(question => {
+    return {
+       question: question.question,
+       correctAnswer: question.correct_answer,
+       incorrectAnswers: question.incorrect_answers,
+       answerArray: [...question.incorrect_answers, question.correct_answer].sort((a,b) => 0.5 - Math.random())
+     }
+    }))
   const [isGameStart, setIsGameStart] = useState(false)
-  const [correctTally, setCorrectTally] = useState(0)
+  const [correctTally, setCorrectTally] = useState(-1)
 
   const API = 'https://opentdb.com/api.php?amount=5&category=21&type=multiple'
 
   //API gets called on initial page load and saves the data received to state (quizData)
-  useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount=5&category=21&type=multiple')
-      .then(response => response.json())
-      .then(data => setQuizData(data.results.map(question => {
-        return {
-          question: question.question,
-          correctAnswer: question.correct_answer,
-          incorrectAnswers: question.incorrect_answers,
-          answerArray: [...question.incorrect_answers, question.correct_answer].sort((a,b) => 0.5 - Math.random())
-        }
-      })))
-  },[])
+  //useEffect(() => {
+   // fetch('https://opentdb.com/api.php?amount=5&category=21&type=multiple')
+   //   .then(response => response.json())
+    //  .then(data => setQuizData(data.results.map(question => {
+     //   return {
+      //    question: question.question,
+      //    correctAnswer: question.correct_answer,
+       //   incorrectAnswers: question.incorrect_answers,
+       //   answerArray: [...question.incorrect_answers, question.correct_answer].sort((a,b) => 0.5 - Math.random())
+       // }
+      //})))
+  //},[])
 
   function checkHowManyCorrect() {
-    setCorrectTally(document.querySelectorAll('.selected.correct').length)
+    if(document.querySelectorAll('.selected').length === 5) {
+      setCorrectTally(document.querySelectorAll('.selected.correct').length)
+    } else {
+      return alert("Please answer all questions")
+    }
   }
-  
-  console.log(quizData)
 
   //Mapping over quizdata and rendering a Quiz component with the desired info as props
   const quizElements = quizData.map(question => (
@@ -47,15 +57,22 @@ export default function App() {
     />
   ))
 
-
   //conditionally render the quizElements once the user clicks on start quiz
   return (
     <div>
       {isGameStart ? 
-        <div>
+        <div className='question-container'>
           {quizElements}
-          <button onClick={() => checkHowManyCorrect()}>Check Answers</button>
-          <p>You got {correctTally}/5 correct</p>
+          <button 
+            onClick={() => checkHowManyCorrect()}
+            className="btn check"
+          >
+            Check Answers
+          </button>
+          {correctTally >= 0 && <>
+            <p className='results-tally'>You got {correctTally}/5 correct</p>
+            <button onClick={() => window.reload}>Play again</button>
+          </>}
         </div> 
         :    
         <div className="home-container">

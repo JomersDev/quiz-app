@@ -24,8 +24,8 @@ export default function Quiz(props) {
     
     return (
         <div>
-            <p>{props.question}</p>
-            <div>
+            <p className="question">{props.question}</p>
+            <div className="answer-container">
                 {answerList}
             </div>
         </div>
